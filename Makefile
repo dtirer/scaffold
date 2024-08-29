@@ -10,6 +10,9 @@ setup:
 	npm install -D tailwindcss
 	cp .env.example .env
 
+sqlc:
+	sqlc generate
+
 migrate-create:
 	@GOOSE_DRIVER=sqlite3 GOOSE_DBSTRING=${DB_NAME}  go run github.com/pressly/goose/v3/cmd/goose@latest -dir=${MIGRATIONS_DIR} create $(filter-out $@,$(MAKECMDGOALS)) sql
 
@@ -23,7 +26,7 @@ templ:
 	templ generate --watch --open-browser=false --proxy="http://localhost:3000"
 
 tailwind:
-	npx tailwindcss -i ./input.css -o ./public/css/output.css --watch
+	npx tailwindcss -i ./input.css -o ./public/css/app.css --watch
 
 server:
 	air \
@@ -32,7 +35,6 @@ server:
 	--build.include_ext "go,templ" \
 	--build.stop_on_error "false" \
 	--misc.clean_on_exit true \
-	--screen.clear_on_rebuild true \
 	--log.main_only true \
 	--proxy.enabled true \
 	--proxy.proxy_port 3000 \
