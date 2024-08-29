@@ -4,10 +4,15 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/dtirer/stack/internal/views"
+	"github.com/dtirer/stack/pkg/views"
+	"github.com/joho/godotenv"
 )
 
 func main() {
+	//
+	if err := godotenv.Load(); err != nil {
+		panic(err)
+	}
 
 	// Route example
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
