@@ -22,6 +22,9 @@ migrate-up:
 migrate-down:
 	@GOOSE_DRIVER=sqlite3 GOOSE_DBSTRING=${DB_NAME}  go run github.com/pressly/goose/v3/cmd/goose@latest -dir=${MIGRATIONS_DIR}  down
 
+migrate-reset:
+	@GOOSE_DRIVER=sqlite3 GOOSE_DBSTRING=${DB_NAME}  go run github.com/pressly/goose/v3/cmd/goose@latest -dir=${MIGRATIONS_DIR}  reset
+
 templ:
 	templ generate --watch --open-browser=false --proxy="http://localhost:3000"
 
