@@ -7,6 +7,7 @@ endif
 setup:
 	go install github.com/sqlc-dev/sqlc/cmd/sqlc@latest
 	go install github.com/a-h/templ/cmd/templ@latest
+	go get ./...
 	npm install -D tailwindcss
 	cp .env.example .env
 

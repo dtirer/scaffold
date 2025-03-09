@@ -1,12 +1,12 @@
 package main
 
 import (
-	"log"
+	"fmt"
 	"net/http"
 	"os"
 	"os/signal"
 
-	"github.com/dtirer/stack/pkg/views"
+	stack "github.com/dtirer/stack/pkg"
 	"github.com/joho/godotenv"
 )
 
@@ -19,20 +19,16 @@ func main() {
 	killSig := make(chan os.Signal, 1)
 	signal.Notify(killSig, os.Interrupt)
 
-	// Route example
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		// Rendering a view
-		views.Index().Render(r.Context(), w)
-	})
-
-	// Serve static files like CSS and JS
-	fs := http.FileServer(http.Dir("./public"))
-	http.Handle("/public/", http.StripPrefix("/public/", fs))
+	srv := stack.NewServer()
+	httpServer := &http.Server{
+		Addr:    fmt.Sprintf("%s:%s", os.Getenv("APP_HOST"), os.Getenv("APP_PORT")),
+		Handler: srv,
+	}
 
 	// Run the server
 	go func() {
-		log.Println("Starting server on localhost:8080")
-		if err := http.ListenAndServe("localhost:8080", nil); err != nil {
+		fmt.Printf("Starting server on %s:%s", os.Getenv("APP_HOST"), os.Getenv("APP_PORT"))
+		if err := httpServer.ListenAndServe(); err != nil {
 			panic(err)
 		}
 	}()
